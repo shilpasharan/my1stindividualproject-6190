@@ -54,6 +54,16 @@ def pandas_sugar():
     return jsonify(df.to_dict())
 
 
+@app.route('/wikipedia/<company>')
+def wikipedia_route(company):
+    text = wikipedia.summary(company, sentences=10)
+    client = language.LanguageServiceClient()
+    document = types.Document(
+        content=text,
+        type=enums.Document.Type.PLAIN_TEXT)
+    entities = client.analyze_entities(document).entities
+    return str(entities)
+
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
