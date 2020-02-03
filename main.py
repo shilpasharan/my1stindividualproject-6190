@@ -27,7 +27,6 @@ from google.cloud.language import types
 # called `app` in `main.py`.
 app = Flask(__name__)
 
-
 @app.route('/')
 def hello():
     """Return a friendly HTTP greeting."""
@@ -36,9 +35,14 @@ def hello():
 
 @app.route('/name/<value>')
 def name(value):
-    val = {"value": value}
+    val = {"value": "bob"}
     return jsonify(val)
 
+
+@app.route('/bob/<value>')
+def bob():
+    val = {"value": bob}
+    return jsonify(val)
 
 @app.route('/html')
 def html():
