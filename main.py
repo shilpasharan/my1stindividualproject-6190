@@ -19,7 +19,9 @@ from flask import Flask
 from flask import jsonify
 import pandas as pd
 import wikipedia
-
+from google.cloud import language
+from google.cloud.language import enums
+from google.cloud.language import types
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
@@ -56,35 +58,13 @@ def pandas_sugar():
 
 @app.route('/wikipedia/<company>')
 def wikipedia_route(company):
-    result = wikipedia.summary(company, sentences=10)
-    return result
-
-
-# Imports the Google Cloud client library
-    from google.cloud import language
-    from google.cloud.language import enums
-    from google.cloud.language import types
-    result = wikipedia.summary(company, sentences=10)
-
+    text = wikipedia.summary(company, sentences=10)
     client = language.LanguageServiceClient()
     document = types.Document(
-        content=result,
+        content=text,
         type=enums.Document.Type.PLAIN_TEXT)
     entities = client.analyze_entities(document).entities
     return str(entities)
-
-
-#!/usr/bin/env python
-
-import webapp2
-
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('I update automatically!')
-
-app = webapp2.WSGIApplication([
-    ('/', MainHandler)
-], debug=True)
 
 
 if __name__ == '__main__':
