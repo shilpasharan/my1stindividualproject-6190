@@ -35,7 +35,7 @@ def hello():
 
 @app.route('/name/<value>')
 def name(value):
-    val = {"value": "bob"}
+    val = {"value": bob}
     return jsonify(val)
 
 
